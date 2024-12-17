@@ -1,7 +1,7 @@
 # character.ai_2_characters_talk_to_each_other
 A Python script using selenium that enables 2 character.ai chatbots to talk to each other.
 
-It does this it switching browser tabs and relaying messages, with a little bit of conversation seeding to choose a topic and (attempt) to keep the conversation going.
+It does this by switching browser tabs and relaying messages, with a little bit of conversation seeding to choose a topic and (attempt) to keep the conversation going.
 
 character.ai doesn't seem to have an API and the "unofficial API" I found on GitHub didn't work for me, so I made this. I made it in an evening and the code is currently crap, but it mostly works and will unless character.ai changes certain parts of their front-end code. 
 

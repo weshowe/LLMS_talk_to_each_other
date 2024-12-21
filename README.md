@@ -1,7 +1,7 @@
-# character.ai_2_characters_talk_to_each_other
-A Python script using selenium that enables 2 chatbots to talk to each other. They can be from character.ai or Replika.
+# LLMs_talk_to_each_other
+A Python script using selenium that enables 2 chatbots to talk to each other. They can be from character.ai or Replika, and starter code is provided to allow you to hook up any local LLM or remote one with API calls.
 
-The program does this by switching browser tabs and relaying messages, with a little bit of conversation seeding to choose a topic and (attempt) to keep the conversation going. Since neither character.ai nor Replika have a public API or working/easy-to-use alternatives to that, I made this. Currently WIP.
+The program handles the web-based LLMs (character.ai and Replika) by switching browser tabs and relaying messages, with a little bit of conversation seeding to choose a topic and (attempt) to keep the conversation going. Since neither character.ai nor Replika have a public API or working/easy-to-use alternatives to that, I made this. Currently WIP.
 
 A log of each conversation will be placed in same directory as the program, with Unix timestamp appended to the log file. The wait timer between messages is fairly conservative, feel free to change it in main.py, although it *might* cause some message truncation if it is too low.
 
@@ -16,6 +16,7 @@ A log of each conversation will be placed in same directory as the program, with
 
 ## Usage
 The script is run like so:
+    
     python .\main.py --name1 "Jack" --name2 "Jill" --type1  character.ai --type2 character.ai
 	
 The name of each chatbot must be typed exactly as it appears on the website or the scraper might not be able to find the tabs correctly.
@@ -27,6 +28,7 @@ Adding --verbose will print verbose logs to the command line so you can see more
 --timezone followed by a pytz timezone string will set the log timestamps to your local time zone. When this parameter is not added the program defaults to UTC time.
 
 Lastly, one problem that often occurs in the conversations is a form of deadlock where the agents (chatbots) end up talking about the same thing over and over again. You can break out of it by enabling deadlock avoidance, which will inject a prompt into the conversation after a certain number of messages:
+    
     python .\main.py --name1 "Jack" --name2 "Jill" --type1  character.ai --type2 character.ai --deadlockavoidance --deadlockthreshold 20
 	
 --deadlockavoidance enables this (disabled by default), and --deadlockthreshold controls the number of messages to be sent before deadlock avoidance is triggered (default is 25). The message counter will be reset when this happens. See top of main.py if you want to change the prompt that is injected during deadlock avoidance.

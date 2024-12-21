@@ -16,6 +16,7 @@ A log of each conversation will be placed in same directory as the program, with
 
 ## Usage
 The script is run like so:
+    
     python .\main.py --name1 "Jack" --name2 "Jill" --type1  character.ai --type2 character.ai
 	
 The name of each chatbot must be typed exactly as it appears on the website or the scraper might not be able to find the tabs correctly.
@@ -27,6 +28,7 @@ Adding --verbose will print verbose logs to the command line so you can see more
 --timezone followed by a pytz timezone string will set the log timestamps to your local time zone. When this parameter is not added the program defaults to UTC time.
 
 Lastly, one problem that often occurs in the conversations is a form of deadlock where the agents (chatbots) end up talking about the same thing over and over again. You can break out of it by enabling deadlock avoidance, which will inject a prompt into the conversation after a certain number of messages:
+    
     python .\main.py --name1 "Jack" --name2 "Jill" --type1  character.ai --type2 character.ai --deadlockavoidance --deadlockthreshold 20
 	
 --deadlockavoidance enables this (disabled by default), and --deadlockthreshold controls the number of messages to be sent before deadlock avoidance is triggered (default is 25). The message counter will be reset when this happens. See top of main.py if you want to change the prompt that is injected during deadlock avoidance.

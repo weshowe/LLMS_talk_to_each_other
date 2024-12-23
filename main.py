@@ -197,9 +197,17 @@ def main():
 
             other.sendMessage(latestOutput, retries = 5, timeToWaitBetweenRetries = 5)
             
-            timeToSleep = 20 + random.uniform(0,2)
-            print(f"Message sent. Waiting {timeToSleep} seconds for response...")
-            time.sleep(timeToSleep)
+            """
+            If we are running a custom agent, there is no need to have a a hardcoded wait for a web response as we are assuming either:
+               1. The custom agent is being run locally and will block until a response is received
+               2. The custom agent is being run remotely but its code is designed to block until a response is received and will handle timeouts, etc. on its own.
+
+            Consequently, we only use a wait timer between message sending if the agent is run in the browser through selenium.
+            """
+            if other.getType() != 'custom':
+                timeToSleep = 20 + random.uniform(0,2)
+                print(f"Message sent. Waiting {timeToSleep} seconds for response...")
+                time.sleep(timeToSleep)
 
             if args.deadlockavoidance:
                 messageCounter += 1

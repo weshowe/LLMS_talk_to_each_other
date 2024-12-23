@@ -3,8 +3,12 @@ import random
 import time
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-
 from util import *
+
+# Sample dependencies for a custom agent, this is for torch and hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4
+# Use or replace these with your imports
+#from transformers import AutoModelForCausalLM, AutoTokenizer, AwqConfig
+#import torch
 
 class Agent(ABC):
     def __init__(self, type, name, driver, window):
@@ -26,6 +30,9 @@ class Agent(ABC):
     
     def getName(self):
         return self.name
+    
+    def getType(self):
+        return self.type
 
     @abstractmethod
     def getLatestMessage(self, **kwargs):
@@ -204,10 +211,25 @@ class replikaAgent(Agent):
 
 # This is a starter class for a custom agent should you wish to implement one.
 # It is made assuming that the agent will have some API call where you send it a message and an object is returned containing the response.
+# As an example, I have included the code needed to use an INT4 quantized Llama-3.1-8B agent.
 class customAgent(Agent):
 
-    # some fields relating to the model object should probably be added here.
-    def __init__(self, name):
+    # some fields relating to the model object should be added here.
+    def __init__(self, name, driver, window):
+
+        # Use or replace this section with your code
+        """
+        model_id = "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4"
+        quantization_config = AwqConfig(bits=4,fuse_max_seq_len=512, do_fuse=True,)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_id)
+        self.model = AutoModelForCausalLM.from_pretrained(
+            model_id,
+            torch_dtype=torch.float16,
+            low_cpu_mem_usage=True,
+            quantization_config=quantization_config
+        ).to("cuda")
+        """
+
         super().__init__("custom", name, None, None)
     
     def getLatestMessage(self, **kwargs):
@@ -217,10 +239,40 @@ class customAgent(Agent):
             self.currentMessage = f"Hello, I am {self.name}."
 
         return self.currentMessage
+    """
+    API call goes in this method. We are making the following assumptions:
 
-    # API call goes in this method, assuming self.currentMessage will be updated at the end.
-    def sendMessage(self, **kwargs):
-        pass
+     1. self.currentMessage will be updated at the end of this method.
+     2. The code will block until a response is received.
+     3. It is user's responsibility to decide how to handle timeouts and the like.
+     4. It is the user's responsibility to parse the output into a string.
+    """
+    def sendMessage(self, message, **kwargs):
+
+        # Use or replace this section with your code
+        """
+        # TODO: Find way to integrate system role, ie: for Llama it would be by adding to prompt dict: {"role": "system", "content": "You are a helpful assistant that responds as a pirate."},
+        # This kind of parameter is the likely source of the character configurations in character.ai, should research this more.
+        prompt = [{"role": "user", "content": message}]
+
+        inputs = self.tokenizer.apply_chat_template(
+            prompt,
+            tokenize=True,
+            add_generation_prompt=True,
+            return_tensors="pt",
+            return_dict=True,
+        ).to("cuda")
+
+        outputs = self.model.generate(**inputs, do_sample=True, max_new_tokens=512)
+        outMessage = self.tokenizer.batch_decode(outputs, skip_special_tokens=False)[0]
+
+        # message formatting to return plaintext. In this case, we retain Llama's special tokens so we can parse it correctly.
+        # If the message is truncated, the eot_id tag won't be present at the end of the output, so we leave it and run the output through the HTML tag regex to remove it if it happens to be there.
+        outMessage = stripHtmlTags(outMessage[outMessage.rfind('<|end_header_id|>') + len('<|end_header_id|>'):outMessage.rfind("<|")].replace("\n\n", " ").replace("\n", " "))
+        
+        self.currentMessage = outMessage
+        """
+
 
 # provides agent name -> object mapping to be used in main.py
 agent_types = {"character.ai": characteraiAgent, "Replika": replikaAgent, "custom": customAgent}

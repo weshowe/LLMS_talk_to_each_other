@@ -47,7 +47,17 @@ So, you all now have Replika support.
 
 ## Adding custom agents
 
-One next thing I would like to try is having a local LLM (or remote with an API) we can send queries to and have talk to web agents (or with each other). I have added a "custom" agent type with starter code within Agent.py that could be used for this, as well as supporting logic within main.py. Haven't tested this yet, will do so soon.
+In the interest of science, I have added a "custom" agent type with starter code within Agent.py that could be used to run your own LLM as well as supporting logic within main.py.
+
+Tested with Meta-Llama-3.1-8B-Instruct-AWQ-INT4 from huggingface (code to do this is commented out in Agent.py) and a character.ai agent. From what I remember character.ai and Replika are both built on GPT3.5, and even with Llama's quantization it was kind of like watching a kid explain stuff to his little brother.
+
+Sadly, modern LLMs have advanced to the point where it's hard to even run inference on a consumer-grade machine, but the quantization let a new-ish Llama run on my 6GB GPU. Your mileage may vary. :)
+
+While the conversation between character.ai Donald Trump and Llama was much more interesting than previous ones, it lacked the spontaneity and flow of real human conversations. Llama kind of acted like a therapist and ended up telling "Donald Trump" that he was promoting hate speech and political violence and encouraged him to seek help. Included in the sample log folder.
+
+The conversation between the Replika and Llama was more interesting (included in the sample log folder). It seemed that the combination of Replika's "conversationality" and Llama being more sophisticated than GPT3.5 avoided the deadlock problem, although their conversation looks like a bunch of people throwing Wikipedia article summaries at each other. Could use some longer testing. I don't think either of these guys will pass the Turing test any time soon, but it was still fun.
+
+Deleting the Replika memories doesn't seem to have wiped everything about the chat history. For example, the Replika had my name hardcoded as John, it got a little confused when it started talking to "Llama", but they figured it out and Replika was keen to forget all about the "madly in love" conversation.
 
 ### Bottom Line
-This program is presented as is without any guarantee of being fit for a particular purpose. I made it as a fun experiment and may or may not try to improve it more. Currently, it's looking like most improvement will be a matter of clever and more sophisticted prompt engineering, maybe with some client-side NLP tricks.
+This program is presented as is without any guarantee of being fit for a particular purpose. I made it as a fun experiment and may or may not try to improve it more.

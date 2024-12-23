@@ -3,7 +3,7 @@ A Python script using selenium that enables 2 chatbots to talk to each other. Th
 
 The program handles the web-based LLMs (character.ai and Replika) by switching browser tabs and relaying messages, with a little bit of conversation seeding to choose a topic and (attempt) to keep the conversation going. Since neither character.ai nor Replika have a public API or working/easy-to-use alternatives to that, I made this. Currently WIP.
 
-A log of each conversation will be placed in same directory as the program, with Unix timestamp appended to the log file. The wait timer between messages is fairly conservative, feel free to change it in main.py, although it *might* cause some message truncation if it is too low.
+A log of each conversation will be placed in same directory as the program, with Unix timestamp appended to the log file. The wait timer between messages for the web-based agents is fairly conservative, feel free to change it in main.py, although it *might* cause some message truncation if it is too low.
 
 ## Installation
 1. Execute "pip install selenium pytz" in the command line. selenium versions 4.0 and above should work.

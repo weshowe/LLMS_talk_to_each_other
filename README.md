@@ -1,5 +1,5 @@
 # LLMs_talk_to_each_other
-A Python script using selenium that enables 2 chatbots to talk to each other. They can be from character.ai or Replika, and starter code is provided to allow you to hook up any local LLM or remote one with API calls.
+A Python script using selenium that enables 2 chatbots to talk to each other. They can be from character.ai or Replika, and starter code is provided to allow you to hook up any local LLM or remote one with API calls. See "Custom Agents" section below for instructions.
 
 The program handles the web-based LLMs (character.ai and Replika) by switching browser tabs and relaying messages, with a little bit of conversation seeding to choose a topic and (attempt) to keep the conversation going. Since neither character.ai nor Replika have a public API or working/easy-to-use alternatives to that, I made this. Currently WIP.
 
